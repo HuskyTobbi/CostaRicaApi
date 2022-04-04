@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 4/04/2022 02:52:15 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.ConfiguracionLayout" table="CONFIGURACION_LAYOUT" catalog="xsaCR" optimistic-lock="version">
+        <id name="idLayout" type="java.lang.Integer">
+            <column name="idLAYOUT" />
+            <generator class="identity" />
+        </id>
+        <property name="idEmpresa" type="int">
+            <column name="idEMPRESA" not-null="true" />
+        </property>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" not-null="true" />
+        </property>
+        <property name="json" type="string">
+            <column name="JSON" length="65535" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

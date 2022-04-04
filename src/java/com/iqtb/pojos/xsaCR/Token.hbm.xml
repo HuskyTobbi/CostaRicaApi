@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 4/04/2022 02:52:15 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.Token" table="TOKEN" catalog="xsaCR" optimistic-lock="version">
+        <id name="idToken" type="java.lang.Integer">
+            <column name="idTOKEN" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="empresas" class="com.iqtb.pojos.xsaCR.Empresas" fetch="select">
+            <column name="idEMPRESA" not-null="true" />
+        </many-to-one>
+        <property name="tokenAcceso" type="string">
+            <column name="TOKEN_ACCESO" length="65535" not-null="true" />
+        </property>
+        <property name="refreshToken" type="string">
+            <column name="REFRESH_TOKEN" length="65535" not-null="true" />
+        </property>
+        <property name="fechaPeticion" type="timestamp">
+            <column name="FECHA_PETICION" length="19" not-null="true" />
+        </property>
+        <property name="sessionState" type="string">
+            <column name="SESSION_STATE" length="38" not-null="true" />
+        </property>
+        <property name="tokenType" type="string">
+            <column name="TOKEN_TYPE" length="15" not-null="true" />
+        </property>
+        <property name="seRefresco" type="byte">
+            <column name="SE_REFRESCO" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

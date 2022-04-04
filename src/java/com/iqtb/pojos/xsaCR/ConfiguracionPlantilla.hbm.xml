@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 4/04/2022 02:52:15 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.ConfiguracionPlantilla" table="CONFIGURACION_PLANTILLA" catalog="xsaCR" optimistic-lock="version">
+        <id name="idConfiguracion" type="java.lang.Integer">
+            <column name="idConfiguracion" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="empresas" class="com.iqtb.pojos.xsaCR.Empresas" fetch="select">
+            <column name="idEmpresa" not-null="true">
+                <comment>Identificador de empresa</comment>
+            </column>
+        </many-to-one>
+        <many-to-one name="plantillasMuestra" class="com.iqtb.pojos.xsaCR.PlantillasMuestra" fetch="select">
+            <column name="idPlantilla" not-null="true">
+                <comment>Identificador de plantilla impresi?n</comment>
+            </column>
+        </many-to-one>
+    </class>
+</hibernate-mapping>
