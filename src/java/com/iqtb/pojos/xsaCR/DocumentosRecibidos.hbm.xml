@@ -24,7 +24,7 @@
             <column name="ARCHIVO" not-null="true" />
         </property>
         <property name="clave" type="string">
-            <column name="CLAVE" length="50" not-null="true" />
+            <column name="CLAVE" length="50"/>
         </property>
         <property name="estado" type="string">
             <column name="ESTADO" length="14" not-null="true" />

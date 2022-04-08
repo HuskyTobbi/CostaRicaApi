@@ -101,19 +101,21 @@ public class ProcesarTXT {
                             List<org.jdom.Element> listaHijosT = txt.getChildren();
                             if (listaHijosT != null && !listaHijosT.isEmpty()) {
                                 String archivoTxt = null;
-                                String clave = null;
+                                //String clave = null;
                                 for (org.jdom.Element hijoArchivo : listaHijosT) {
                                     logger.info("Recorriendo la lista de Hijos  de Txt [" + nofactura + "]");
                                     
                                     if (hijoArchivo.getName().equals("ArchivoTxt")){
                                         logger.info("Dentro del nodo Txt se encontro atributo [ArchivoTxt]");
                                         archivoTxt = listaHijosT.get(0).getAttributeValue("ArchivoTxt");
-                                        clave = listaHijosT.get(0).getAttributeValue("Clave");
+                                        //clave = listaHijosT.get(0).getAttributeValue("Clave");
                                     }
                                 }
-                                if (archivoTxt != null && clave != null) {
+                                //if (archivoTxt != null && clave != null) {
+                                if (archivoTxt != null) {
                                     logger.info("agregando archivoTxt");
-                                    listaTxtArchivo.add(new TxtArchivo(archivoTxt, clave));
+                                    //listaTxtArchivo.add(new TxtArchivo(archivoTxt, clave));
+                                    listaTxtArchivo.add(new TxtArchivo(archivoTxt));
                                     archivoTxt = null;
 
                                 }

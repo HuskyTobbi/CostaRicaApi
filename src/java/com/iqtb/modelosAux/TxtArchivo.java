@@ -12,11 +12,10 @@ package com.iqtb.modelosAux;
 public class TxtArchivo {
      //factura (una Peticion puede tener varios nodos factura)
     private String archivoTxt;
-    private String clave;
     
-    public TxtArchivo(String archivoTxt, String clave){
+    //public TxtArchivo(String archivoTxt, clave){
+    public TxtArchivo(String archivoTxt){
         this.archivoTxt = archivoTxt;
-        this.clave = clave;
     }
 
     public String getArchivoTxt() {
@@ -25,14 +24,6 @@ public class TxtArchivo {
 
     public void setArchivoTxt(String archivoTxt) {
         this.archivoTxt = archivoTxt;
-    }
-
-    public String getClave() {
-        return clave;
-    }
-
-    public void setClave(String clave) {
-        this.clave = clave;
     }
     
 }

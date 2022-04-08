@@ -81,8 +81,8 @@ public class ArchivoTXT {
             logger.error("Surgieron errores de autenticacion: " + ex.getMessage());
             errorGeneral = ex.getMessage();
         } catch (ErrorNoEmisor ex) { 
-            logger.error("Error, no se coloco un NoEmisor donde se van a recibir las facturas " + ex.getMessage());
-            errorGeneral = "No es posible guardar las facturas, debido a que no se coloco un NoEmisor para recepcion";
+            logger.error("Error, " + ex.getMessage());
+            errorGeneral = "No es posible guardar el txt, debido a que no se coloco un NoEmisor correcto o registrado en BD";
         }
         
         return errorGeneral;
@@ -99,8 +99,8 @@ public class ArchivoTXT {
                     logger.info("El Numero Emisor para procesar peticion es: " + NoEmisor);
                     procesarPeticion(peticion, null, NoEmisor, idEmpresa);
                 } else {
-                    logger.warn("Es null el idEmpresa para el NoEmisor:"+NoEmisor+" se guardara en BD");
-                    procesarPeticion(peticion, "No existe el NoEmisor[" + NoEmisor + "] al que se desea insertar esta factura", NoEmisor, null);
+                    throw new ErrorNoEmisor("El numero Emisor no se encuentra registrado en las Empresas Conocidas");
+                    //procesarPeticion(peticion, null, NoEmisor, null);
                 }
                 
             } else {
@@ -129,70 +129,77 @@ public class ArchivoTXT {
     public void procesarPeticion(Peticion peticion, String error, String NoEmisor, Integer idEmpresa) {
         List<TxtArchivo> listaFacturasArchivo = peticion.getListaTxtArchivo();
         List<TxtRespuesta> listaTxtRespuesta = new ArrayList<TxtRespuesta>();
-        if (listaFacturasArchivo != null) {
-            logger.info("La lista de facturas: " + listaFacturasArchivo.size());
-            int auxContador = 0;
-            logger.info("Se recibio la listaFactRespuesta de peticiones con tamanio: " + listaFacturasArchivo.size());
-            for (TxtArchivo facturaArchivoItem : listaFacturasArchivo) {
-                try {
-                    auxContador++;  
-                    //logger.info("El tamano de la lista para la peticion con id[" + auxContador + "] ");
-                    String txtBase64 = facturaArchivoItem.getArchivoTxt();
-                    logger.info("txt en base64: " + txtBase64);
-                    byte[] txtBytes = LibBase64.decode(txtBase64);
-                    if(txtBytes != null ){
-                        String txt = new String(txtBytes, "UTF-8");
-                        if (txt != null && !txt.isEmpty()) {
-                            txt = txt.trim();
-                            txtBytes = txt.getBytes("UTF-8");
-                            txt = new String(txtBytes, "UTF-8");
-                        }
-                        String clave = facturaArchivoItem.getClave();
-                        boolean isTxt = false;
-                        //Hay que validar que realmente sea un .txt 
-                        isTxt = true;
-                        //por desarrollar
+        if(idEmpresa != null){
+            if (listaFacturasArchivo != null) {
+                logger.info("La lista de facturas: " + listaFacturasArchivo.size());
+                int auxContador = 0;
+                logger.info("Se recibio la listaFactRespuesta de peticiones con tamanio: " + listaFacturasArchivo.size());
+                for (TxtArchivo facturaArchivoItem : listaFacturasArchivo) {
+                    try {
+                        auxContador++;  
+                        //logger.info("El tamano de la lista para la peticion con id[" + auxContador + "] ");
+                        String txtBase64 = facturaArchivoItem.getArchivoTxt();
+                        logger.info("txt en base64: " + txtBase64);
+                        byte[] txtBytes = LibBase64.decode(txtBase64);
+                        if(txtBytes != null ){
+                            String txt = new String(txtBytes, "UTF-8");
+                            if (txt != null && !txt.isEmpty()) {
+                                txt = txt.trim();
+                                txtBytes = txt.getBytes("UTF-8");
+                                txt = new String(txtBytes, "UTF-8");
+                            }
+                            //String clave = facturaArchivoItem.getClave();
+                            boolean isTxt = false;
+                            //Hay que validar que realmente sea un .txt 
+                            isTxt = true;
+                            //por desarrollar
 
-                        if (isTxt && clave!= null && clave.length()==50) {
-                            //logger.info("Se guardara archivo con Clave: "+clave);
-                            //Guardar Txt
-                            DocumentosRecibidos documentosRecibidoTemp = new DocumentosRecibidos();
-                            Sucursales sucursal = new SucursalesDAO().getByIdEmpresa(idEmpresa);
-                            documentosRecibidoTemp.setSucursales(sucursal);
-                            documentosRecibidoTemp.setFechaRecepcion(new Date());
-                            documentosRecibidoTemp.setArchivo(txt);
-                            documentosRecibidoTemp.setClave(clave);
-                            documentosRecibidoTemp.setEstado("NUEVO");
-                            Integer idARCHIVO = new DocumentosRecibidosDAO().SaveOrUpdate(documentosRecibidoTemp);
-                            if (idARCHIVO != null) {
-                                logger.info("DocumentoRecibido guardado con idARCHIVO: " + idARCHIVO);
-                                TxtRespuesta txtResp = new TxtRespuesta("Guardado", "");
-                                listaTxtRespuesta.add(txtResp);
+                            if (isTxt ) {
+                            //if (isTxt && clave!= null && clave.length()==50) {
+                                //logger.info("Se guardara archivo con Clave: "+clave);
+                                //Guardar Txt
+                                DocumentosRecibidos documentosRecibidoTemp = new DocumentosRecibidos();
+                                Sucursales sucursal = new SucursalesDAO().getByIdEmpresa(idEmpresa);
+                                documentosRecibidoTemp.setSucursales(sucursal);
+                                documentosRecibidoTemp.setFechaRecepcion(new Date());
+                                documentosRecibidoTemp.setArchivo(txt);
+                                documentosRecibidoTemp.setEstado("NUEVO");
+                                Integer idARCHIVO = new DocumentosRecibidosDAO().SaveOrUpdate(documentosRecibidoTemp);
+                                if (idARCHIVO != null) {
+                                    logger.info("DocumentoRecibido guardado con idARCHIVO: " + idARCHIVO);
+                                    TxtRespuesta txtResp = new TxtRespuesta("Guardado", "");
+                                    listaTxtRespuesta.add(txtResp);
+                                } else {
+                                    logger.info("El cfdi no pudo ser guardado correcamente");
+                                    TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El cfdi no pudo ser guardado correctamente, intente mas tarde");
+                                    listaTxtRespuesta.add(txtResp);
+                                }
                             } else {
-                                logger.info("El cfdi no pudo ser guardado correcamente");
-                                TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El cfdi no pudo ser guardado correctamente, intente mas tarde");
+                                logger.info("El contenido erroneo del txt es: " + txt);
+                                logger.info("Armando Respuesta erronea de contenido TXT");
+                                TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El txt No es base 64 o la clave es erronea");
                                 listaTxtRespuesta.add(txtResp);
                             }
                         } else {
-                            logger.info("El contenido erroneo del txt es: " + txt);
+                            logger.info("El contenido ArchivoTxt del txt esta vacio");
                             logger.info("Armando Respuesta erronea de contenido TXT");
-                            TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El txt No es base 64 o la clave es erronea");
+                            TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El contenido ArchivoTxt del txt esta vacio");
                             listaTxtRespuesta.add(txtResp);
                         }
-                    } else {
-                        logger.info("El contenido ArchivoTxt del txt esta vacio");
-                        logger.info("Armando Respuesta erronea de contenido TXT");
-                        TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El contenido ArchivoTxt del txt esta vacio");
-                        listaTxtRespuesta.add(txtResp);
+                    } catch (UnsupportedEncodingException ex) {
+                        logger.error("Error de codificacion: " + ex.getMessage());
                     }
-                } catch (UnsupportedEncodingException ex) {
-                    logger.error("Error de codificacion: " + ex.getMessage());
                 }
+            } else {
+                logger.info("La lista de Txt es nula");
             }
         } else {
-            logger.info("La lista de Txt es nula");
+            logger.info("El contenido ArchivoTxt del txt esta vacio");
+            logger.info("Armando Respuesta erronea de contenido TXT");
+            TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El NoEmisor no corresponde a ninguna Empresa registrada");
+            listaTxtRespuesta.add(txtResp);
         }
-        logger.info("El tamano de la lista para la peticion con NoEmisor " + NoEmisor + " para respoder es de: " + ((listaTxtRespuesta != null) ? Integer.valueOf(listaTxtRespuesta.size()) : "Vacia"));
+        logger.info("El tamano de la lista para la peticion con NoEmisor " + NoEmisor + " para responder es de: " + ((listaTxtRespuesta != null) ? Integer.valueOf(listaTxtRespuesta.size()) : "Vacia"));
         this.listaRespuesta.add(new Respuesta(NoEmisor, listaTxtRespuesta));
     }
     
