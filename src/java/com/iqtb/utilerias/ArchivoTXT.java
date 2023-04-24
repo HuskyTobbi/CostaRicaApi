@@ -8,6 +8,7 @@ package com.iqtb.utilerias;
 import com.iqtb.daos.xsaCR.DocumentosRecibidosDAO;
 import com.iqtb.daos.xsaCR.EmpresasDAO;
 import com.iqtb.daos.xsaCR.SucursalesDAO;
+import com.iqtb.daos.xsaCR.XmlsDAO;
 import com.iqtb.exceptions.ErrorAutenticacion;
 import com.iqtb.exceptions.ErrorNoEmisor;
 import com.iqtb.modelosAux.TxtArchivo;
@@ -16,6 +17,7 @@ import com.iqtb.modelosAux.Respuesta;
 import com.iqtb.modelosAux.TxtRespuesta;
 import com.iqtb.pojos.xsaCR.DocumentosRecibidos;
 import com.iqtb.pojos.xsaCR.Sucursales;
+import com.iqtb.pojos.xsaCR.Xmls;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -167,11 +169,35 @@ public class ArchivoTXT {
                                 Integer idARCHIVO = new DocumentosRecibidosDAO().SaveOrUpdate(documentosRecibidoTemp);
                                 if (idARCHIVO != null) {
                                     logger.info("DocumentoRecibido guardado con idARCHIVO: " + idARCHIVO);
-                                    TxtRespuesta txtResp = new TxtRespuesta("Guardado", "");
-                                    listaTxtRespuesta.add(txtResp);
+                                    Thread.sleep(6500);
+                                    DocumentosRecibidos archivoGenerado = new DocumentosRecibidosDAO().getByIdArchivo(idARCHIVO);
+                                    if(archivoGenerado != null){
+                                        logger.info("Se encontro documento recibido con estado diferente de NUEVO");
+                                        if(archivoGenerado.getEstado().equals("GENERADO")){
+                                            Xmls objXml = new XmlsDAO().getByIdArchivo(idARCHIVO);
+                                            String xmlTimbrado = "";
+                                            if(objXml != null){
+                                                logger.info("Se encontro objXml se agrega xmlsf");
+                                                if(objXml.getXmlSf() != null){
+                                                    xmlTimbrado = objXml.getXmlSf();
+                                                }
+                                            } 
+                                            TxtRespuesta txtResp = new TxtRespuesta("GENERADO", xmlTimbrado);
+                                            listaTxtRespuesta.add(txtResp);
+                                        }
+                                        
+                                        if(archivoGenerado.getEstado().equals("ERROR")){
+                                            TxtRespuesta txtResp = new TxtRespuesta("ERROR",archivoGenerado.getError());
+                                            listaTxtRespuesta.add(txtResp);
+                                        }
+                                    } else {
+                                        logger.info("No se ha procesado o esta siendo procesado el nuevo documento recibido");
+                                        TxtRespuesta txtResp = new TxtRespuesta("Guardado", "El documento sera procesado o esta siendo procesado");
+                                        listaTxtRespuesta.add(txtResp);
+                                    }
                                 } else {
-                                    logger.info("El cfdi no pudo ser guardado correcamente");
-                                    TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El cfdi no pudo ser guardado correctamente, intente mas tarde");
+                                    logger.info("El DocumentoRecibido no pudo ser guardado correcamente");
+                                    TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El DocumentoRecibido no pudo ser guardado correctamente, intente mas tarde");
                                     listaTxtRespuesta.add(txtResp);
                                 }
                             } else {
@@ -188,13 +214,15 @@ public class ArchivoTXT {
                         }
                     } catch (UnsupportedEncodingException ex) {
                         logger.error("Error de codificacion: " + ex.getMessage());
+                    } catch (InterruptedException ex) {
+                        logger.error("InterruptedException: " + ex);
                     }
                 }
             } else {
                 logger.info("La lista de Txt es nula");
             }
         } else {
-            logger.info("El contenido ArchivoTxt del txt esta vacio");
+            logger.info("El NoEmisor no corresponde a ninguna Empresa registrada");
             logger.info("Armando Respuesta erronea de contenido TXT");
             TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El NoEmisor no corresponde a ninguna Empresa registrada");
             listaTxtRespuesta.add(txtResp);

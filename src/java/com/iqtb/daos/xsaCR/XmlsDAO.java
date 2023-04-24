@@ -6,7 +6,7 @@
 package com.iqtb.daos.xsaCR;
 
 import com.iqtb.conexion.HibernateUtil;
-import com.iqtb.pojos.xsaCR.Sucursales;
+import com.iqtb.pojos.xsaCR.Xmls;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -18,35 +18,37 @@ import org.hibernate.Transaction;
  *
  * @author macminidesarrollo
  */
-public class SucursalesDAO {
+public class XmlsDAO {
     
     private Transaction tx;
     private Session session;
-    private static final Logger logger = Logger.getLogger(SucursalesDAO.class);
+    private static final Logger logger = Logger.getLogger(XmlsDAO.class);
     
     
-    public Sucursales getByIdEmpresa(Integer idEmpresa) {
-        List<Sucursales> listSucursales = null;
+    
+    public Xmls getByIdArchivo(Integer idArchivo) {
+        List<Xmls> listaXmls = null;
         try {
             iniciarOperacion();
-            String hql = "select s from Sucursales as s where s.empresas.idEmpresa="+idEmpresa;
+            String hql = "from Xmls where idArchivo="+idArchivo;
             Query query = session.createQuery(hql);
-            listSucursales = query.list();
+            listaXmls = query.list();
             tx.commit();
         } catch (HibernateException e) {
             tx.rollback();
-            logger.error("Error al obtener la Sucursal, ERROR: " + e.getMessage());
+            logger.error("Error al obtener el Xml, ERROR: " + e.getMessage());
         } finally {
             cerrarSession();
         }
-        if (listSucursales != null && listSucursales.size()>0) {
-            logger.info("Se encontraron: " + listSucursales.size() + " Sucursales");
-            return listSucursales.get(0);
+        if (listaXmls != null && listaXmls.size()>0) {
+            logger.info("Se encontraron: " + listaXmls.size() + " Xmls");
+            return listaXmls.get(0);
         } else {
-            logger.warn("No hay items en  listSucursales");
-            return null;
+            logger.warn("No hay items en listaXmls");
         }
+        return null;
     }
+    
     
     private void iniciarOperacion() {
         //logger.info("iniciandoOperacion TokenDAO");

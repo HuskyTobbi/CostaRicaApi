@@ -173,8 +173,8 @@ public class ProcesarTXT {
         HashMap<String, String> mapUsuarios = new HashMap<>();
         BufferedReader input = null;
         try {
-            File aFile = new File("/private/work/iqtb/configRecepcionArchivo/UsuariosRecepcion/usuarios.txt");
-            //File aFile = new File("/work/iqtb/configRecepcionArchivo/UsuariosRecepcion/usuarios.txt");
+            //File aFile = new File("/private/work/iqtb/configRecepcionArchivo/UsuariosRecepcion/usuarios.txt");
+            File aFile = new File("/work/iqtb/configRecepcionArchivo/UsuariosRecepcion/usuarios.txt");
             logger.debug("Existe configuracion: " + aFile.exists());
             logger.debug("Se puede leer: " + aFile.canRead());
             InputStreamReader reader = new InputStreamReader(new FileInputStream(aFile), "UTF-8");
@@ -240,8 +240,8 @@ public class ProcesarTXT {
                     org.jdom.Element factura = new org.jdom.Element("Txt");
                     //Aqui se comienza a crear la respuesta
                     factura.setAttribute("estado",objTxtRespuesta.getRespuesta());
-                    if(objTxtRespuesta.getError()!= null && !objTxtRespuesta.getError().isEmpty()){
-                        factura.setAttribute("error",objTxtRespuesta.getError());
+                    if(objTxtRespuesta.getMensaje()!= null && !objTxtRespuesta.getMensaje().isEmpty()){
+                        factura.setAttribute("mensaje",objTxtRespuesta.getMensaje());
                     }
                     validar.addContent((Content) factura);
                 }

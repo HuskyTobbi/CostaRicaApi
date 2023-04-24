@@ -36,25 +36,25 @@
             <column name="ID_TIPO" length="2" not-null="true" />
         </property>
         <property name="idNumero" type="string">
-            <column name="ID_NUMERO" length="10" not-null="true" unique="true" />
+            <column name="ID_NUMERO" length="14" not-null="true" unique="true" />
         </property>
         <property name="provincia" type="string">
-            <column name="PROVINCIA" length="2" not-null="true" />
+            <column name="PROVINCIA" length="2"  />
         </property>
         <property name="canton" type="string">
-            <column name="CANTON" length="2" not-null="true" />
+            <column name="CANTON" length="2"  />
         </property>
         <property name="distrito" type="string">
-            <column name="DISTRITO" length="2" not-null="true" />
+            <column name="DISTRITO" length="2" />
         </property>
         <property name="otrasSenias" type="string">
             <column name="OTRAS_SENIAS" length="65535" />
         </property>
         <property name="telefonoCodpais" type="string">
-            <column name="TELEFONO_CODPAIS" length="4" not-null="true" />
+            <column name="TELEFONO_CODPAIS" length="4"  />
         </property>
         <property name="numTelefono" type="string">
-            <column name="NUM_TELEFONO" length="10" not-null="true" />
+            <column name="NUM_TELEFONO" length="10" />
         </property>
         <set name="configuracionesTokens" table="CONFIGURACIONES_TOKEN" inverse="true" lazy="true" fetch="select">
             <key>

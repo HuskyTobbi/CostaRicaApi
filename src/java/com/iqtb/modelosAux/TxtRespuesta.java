@@ -11,15 +11,15 @@ package com.iqtb.modelosAux;
  */
 public class TxtRespuesta {
     private String respuesta;
-    private String error;
+    private String mensaje;
     
     public TxtRespuesta(){
         
     }
     
-    public TxtRespuesta(String respuesta, String error){
+    public TxtRespuesta(String respuesta, String mensaje){
         this.respuesta=respuesta;
-        this.error=error;
+        this.mensaje=mensaje;
     }
 
     public String getRespuesta() {
@@ -30,12 +30,13 @@ public class TxtRespuesta {
         this.respuesta = respuesta;
     }
 
-    public String getError() {
-        return error;
+    public String getMensaje() {
+        return mensaje;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
     }
+
     
 }
