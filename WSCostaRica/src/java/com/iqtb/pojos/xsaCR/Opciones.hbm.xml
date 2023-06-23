@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.Opciones" table="OPCIONES" catalog="xsaCR" optimistic-lock="version">
+        <id name="idOpcion" type="java.lang.Integer">
+            <column name="idOPCION" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="grupos" class="com.iqtb.pojos.xsaCR.Grupos" fetch="select">
+            <column name="idGRUPO" />
+        </many-to-one>
+        <many-to-one name="modulos" class="com.iqtb.pojos.xsaCR.Modulos" fetch="select">
+            <column name="idMODULO" />
+        </many-to-one>
+        <property name="opcion" type="string">
+            <column name="OPCION" not-null="true" />
+        </property>
+        <property name="href" type="string">
+            <column name="HREF" />
+        </property>
+        <property name="orden" type="java.lang.Short">
+            <column name="ORDEN" />
+        </property>
+        <property name="visible" type="java.lang.Boolean">
+            <column name="VISIBLE" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="DESCRIPCION" />
+        </property>
+        <property name="nivel" type="string">
+            <column name="NIVEL" length="5" />
+        </property>
+        <property name="opcionesIdOpcion" type="java.lang.Integer">
+            <column name="OPCIONES_idOPCION" />
+        </property>
+        <property name="identificador" type="string">
+            <column name="IDENTIFICADOR" />
+        </property>
+        <property name="tipo" type="string">
+            <column name="TIPO" length="9" />
+        </property>
+        <property name="icono" type="string">
+            <column name="ICONO" length="100" />
+        </property>
+        <set name="rolesOpcioneses" table="ROLES_OPCIONES" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idOPCION" not-null="true" />
+            </key>
+            <one-to-many class="com.iqtb.pojos.xsaCR.RolesOpciones" />
+        </set>
+    </class>
+</hibernate-mapping>

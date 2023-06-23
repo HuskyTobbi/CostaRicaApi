@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.UsuariosRecepcion" table="USUARIOS_RECEPCION" catalog="xsaCR" optimistic-lock="version">
+        <id name="idUsuarioRecepcion" type="java.lang.Integer">
+            <column name="idUSUARIO_RECEPCION" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="sucursales" class="com.iqtb.pojos.xsaCR.Sucursales" fetch="select">
+            <column name="idSUCURSAL" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tiposCfd" class="com.iqtb.pojos.xsaCR.TiposCfd" fetch="select">
+            <column name="idTIPO_CFD" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" length="45" not-null="true" />
+        </property>
+        <property name="usuario" type="string">
+            <column name="USUARIO" length="45" not-null="true" />
+        </property>
+        <property name="passwd" type="string">
+            <column name="PASSWD" length="45" not-null="true" />
+        </property>
+        <property name="homeftp" type="string">
+            <column name="HOMEFTP" length="45" />
+        </property>
+        <property name="homesftp" type="string">
+            <column name="HOMESFTP" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.Cfds" table="CFDS" catalog="xsaCR" optimistic-lock="version">
+        <id name="idCfd" type="java.lang.Integer">
+            <column name="idCFD" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="clientes" class="com.iqtb.pojos.xsaCR.Clientes" fetch="select">
+            <column name="idCLIENTE" not-null="true" />
+        </many-to-one>
+        <many-to-one name="sucursales" class="com.iqtb.pojos.xsaCR.Sucursales" fetch="select">
+            <column name="idSUCURSAL" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tiposCfd" class="com.iqtb.pojos.xsaCR.TiposCfd" fetch="select">
+            <column name="idTIPO_CFD" not-null="true" />
+        </many-to-one>
+        <property name="serie" type="string">
+            <column name="SERIE" />
+        </property>
+        <property name="folio" type="java.lang.Long">
+            <column name="FOLIO" />
+        </property>
+        <property name="clave" type="string">
+            <column name="CLAVE" length="36" not-null="true" unique="true" />
+        </property>
+        <property name="fecha" type="timestamp">
+            <column name="FECHA" length="19" not-null="true" />
+        </property>
+        <property name="numeroAprobacion" type="java.lang.Long">
+            <column name="NUMERO_APROBACION" />
+        </property>
+        <property name="anioAprobacion" type="java.lang.Integer">
+            <column name="ANIO_APROBACION" />
+        </property>
+        <property name="subtotal" type="big_decimal">
+            <column name="SUBTOTAL" precision="26" scale="6" not-null="true" />
+        </property>
+        <property name="descuento" type="big_decimal">
+            <column name="DESCUENTO" precision="16" scale="6" />
+        </property>
+        <property name="total" type="big_decimal">
+            <column name="TOTAL" precision="26" scale="6" not-null="true" />
+        </property>
+        <property name="tipoMoneda" type="string">
+            <column name="TIPO_MONEDA" length="5" />
+        </property>
+        <property name="tipoCambio" type="big_decimal">
+            <column name="TIPO_CAMBIO" precision="10" scale="4" />
+        </property>
+        <property name="totalImpuestos" type="big_decimal">
+            <column name="TOTAL_IMPUESTOS" precision="16" scale="6" />
+        </property>
+        <property name="estadoFiscal" type="string">
+            <column name="ESTADO_FISCAL" length="25" />
+        </property>
+        <property name="estado" type="string">
+            <column name="ESTADO" length="13" />
+        </property>
+        <property name="fechaCancelacion" type="timestamp">
+            <column name="FECHA_CANCELACION" length="19" />
+        </property>
+        <property name="fechaModificacion" type="timestamp">
+            <column name="FECHA_MODIFICACION" length="19" not-null="true" />
+        </property>
+        <property name="idPlantilla" type="java.lang.Integer">
+            <column name="idPLANTILLA" />
+        </property>
+        <property name="fechaVencimiento" type="timestamp">
+            <column name="FECHA_VENCIMIENTO" length="19">
+                <comment>Fecha de fin de valid&#195;&#169;z</comment>
+            </column>
+        </property>
+        <property name="numeroCedulaEmisor" type="string">
+            <column name="NUMERO_CEDULA_EMISOR" length="13" />
+        </property>
+        <property name="numeroCedulaReceptor" type="string">
+            <column name="NUMERO_CEDULA_RECEPTOR" length="13" />
+        </property>
+        <set name="documentosRecibidoses" table="DOCUMENTOS_RECIBIDOS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idCFD" />
+            </key>
+            <one-to-many class="com.iqtb.pojos.xsaCR.DocumentosRecibidos" />
+        </set>
+    </class>
+</hibernate-mapping>

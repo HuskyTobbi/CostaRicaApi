@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.FoliosEmpresas" table="FOLIOS_EMPRESAS" catalog="xsaCR" optimistic-lock="version">
+        <id name="idFolioserie" type="java.lang.Integer">
+            <column name="idFOLIOSERIE" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="empresas" class="com.iqtb.pojos.xsaCR.Empresas" fetch="select">
+            <column name="idEMPRESA" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tiposCfd" class="com.iqtb.pojos.xsaCR.TiposCfd" fetch="select">
+            <column name="idTIPO_CFD" not-null="true" />
+        </many-to-one>
+        <property name="serie" type="string">
+            <column name="SERIE" />
+        </property>
+        <property name="inicio" type="long">
+            <column name="INICIO" not-null="true" />
+        </property>
+        <property name="final_" type="long">
+            <column name="FINAL" not-null="true" />
+        </property>
+        <property name="numeroAprobacion" type="java.lang.Long">
+            <column name="NUMERO_APROBACION" />
+        </property>
+        <property name="anioAprobacion" type="java.lang.Integer">
+            <column name="ANIO_APROBACION" />
+        </property>
+        <property name="estado" type="string">
+            <column name="ESTADO" length="8">
+                <comment>Estado de la serie</comment>
+            </column>
+        </property>
+        <property name="ultimaVerificacion" type="timestamp">
+            <column name="ULTIMA_VERIFICACION" length="19" not-null="true">
+                <comment>Fecha de &#195;&#186;ltima verificaci&#195;&#179;n</comment>
+            </column>
+        </property>
+        <property name="ultimoFolioBloque" type="java.lang.Long">
+            <column name="ULTIMO_FOLIO_BLOQUE" />
+        </property>
+        <property name="tamanioBloque" type="big_decimal">
+            <column name="TAMANIO_BLOQUE" precision="6" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.ConfiguracionesToken" table="CONFIGURACIONES_TOKEN" catalog="xsaCR" optimistic-lock="version">
+        <id name="idConfigToken" type="java.lang.Integer">
+            <column name="idCONFIG_TOKEN" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="empresas" class="com.iqtb.pojos.xsaCR.Empresas" fetch="select">
+            <column name="idEMPRESA" not-null="true" />
+        </many-to-one>
+        <property name="urlProdPrue" type="boolean">
+            <column name="URL_PROD_PRUE" not-null="true" />
+        </property>
+        <property name="user" type="string">
+            <column name="USER" length="65" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

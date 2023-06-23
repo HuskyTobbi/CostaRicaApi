@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.Xmls" table="XMLS" catalog="xsaCR" optimistic-lock="version">
+        <id name="idXml" type="java.lang.Integer">
+            <column name="idXML" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="documentosRecibidos" class="com.iqtb.pojos.xsaCR.DocumentosRecibidos" fetch="select">
+            <column name="idARCHIVO" not-null="true" />
+        </many-to-one>
+        <property name="xmlSf" type="string">
+            <column name="XML_SF" />
+        </property>
+        <property name="xmlCf" type="string">
+            <column name="XML_CF" />
+        </property>
+        <property name="xmlTimbrado" type="string">
+            <column name="XML_TIMBRADO" />
+        </property>
+    </class>
+</hibernate-mapping>

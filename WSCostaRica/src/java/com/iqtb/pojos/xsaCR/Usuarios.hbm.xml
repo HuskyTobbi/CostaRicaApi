@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.Usuarios" table="USUARIOS" catalog="xsaCR" optimistic-lock="version">
+        <id name="idUsuario" type="java.lang.Integer">
+            <column name="idUSUARIO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="roles" class="com.iqtb.pojos.xsaCR.Roles" fetch="select">
+            <column name="idROL" not-null="true" />
+        </many-to-one>
+        <property name="email" type="string">
+            <column name="EMAIL" not-null="true" />
+        </property>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" />
+        </property>
+        <property name="paterno" type="string">
+            <column name="PATERNO" />
+        </property>
+        <property name="materno" type="string">
+            <column name="MATERNO" />
+        </property>
+        <property name="passkey" type="string">
+            <column name="PASSKEY" not-null="true" />
+        </property>
+        <property name="fallidos" type="java.lang.Integer">
+            <column name="FALLIDOS" />
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="13" not-null="true" />
+        </property>
+        <property name="userId" type="string">
+            <column name="userId" not-null="true" />
+        </property>
+        <property name="notifiedExpiration" type="boolean">
+            <column name="NOTIFIED_EXPIRATION" not-null="true" />
+        </property>
+        <property name="referencia" type="string">
+            <column name="REFERENCIA" />
+        </property>
+        <property name="dateExpirationUser" type="timestamp">
+            <column name="DATE_EXPIRATION_USER" length="19" />
+        </property>
+        <property name="lastPassChange" type="timestamp">
+            <column name="LAST_PASS_CHANGE" length="19" />
+        </property>
+        <property name="fechaAlta" type="timestamp">
+            <column name="FECHA_ALTA" length="19" />
+        </property>
+        <set name="usuariosEmpresases" table="USUARIOS_EMPRESAS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idUSUARIO" not-null="true" />
+            </key>
+            <one-to-many class="com.iqtb.pojos.xsaCR.UsuariosEmpresas" />
+        </set>
+    </class>
+</hibernate-mapping>

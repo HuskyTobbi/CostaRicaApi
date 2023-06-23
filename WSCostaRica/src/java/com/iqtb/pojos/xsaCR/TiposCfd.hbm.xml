@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.TiposCfd" table="TIPOS_CFD" catalog="xsaCR" optimistic-lock="version">
+        <id name="idTipoCfd" type="java.lang.Integer">
+            <column name="idTIPO_CFD" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="empresas" class="com.iqtb.pojos.xsaCR.Empresas" fetch="select">
+            <column name="idEMPRESA" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" length="45" />
+        </property>
+        <property name="tipo" type="string">
+            <column name="TIPO" length="45" />
+        </property>
+        <property name="versionCfd" type="string">
+            <column name="VERSION_CFD" length="45" />
+        </property>
+        <set name="foliosEmpresases" table="FOLIOS_EMPRESAS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idTIPO_CFD" not-null="true" />
+            </key>
+            <one-to-many class="com.iqtb.pojos.xsaCR.FoliosEmpresas" />
+        </set>
+        <set name="cfdses" table="CFDS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idTIPO_CFD" not-null="true" />
+            </key>
+            <one-to-many class="com.iqtb.pojos.xsaCR.Cfds" />
+        </set>
+        <set name="documentosRecibidoses" table="DOCUMENTOS_RECIBIDOS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idTIPO_CFD" not-null="true" />
+            </key>
+            <one-to-many class="com.iqtb.pojos.xsaCR.DocumentosRecibidos" />
+        </set>
+        <set name="usuariosRecepcions" table="USUARIOS_RECEPCION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idTIPO_CFD" not-null="true" />
+            </key>
+            <one-to-many class="com.iqtb.pojos.xsaCR.UsuariosRecepcion" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2023 02:28:56 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.iqtb.pojos.xsaCR.Grupos" table="GRUPOS" catalog="xsaCR" optimistic-lock="version">
+        <id name="idGrupo" type="java.lang.Integer">
+            <column name="idGRUPO" />
+            <generator class="identity" />
+        </id>
+        <property name="grupo" type="string">
+            <column name="GRUPO" />
+        </property>
+        <property name="orden" type="java.lang.Short">
+            <column name="ORDEN" />
+        </property>
+        <set name="opcioneses" table="OPCIONES" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idGRUPO" />
+            </key>
+            <one-to-many class="com.iqtb.pojos.xsaCR.Opciones" />
+        </set>
+    </class>
+</hibernate-mapping>
