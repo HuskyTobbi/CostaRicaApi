@@ -11,6 +11,7 @@ import com.iqtb.daos.xsaCR.SucursalesDAO;
 import com.iqtb.daos.xsaCR.XmlsDAO;
 import com.iqtb.exceptions.ErrorAutenticacion;
 import com.iqtb.exceptions.ErrorNoEmisor;
+import com.iqtb.inicio.ProcesarPeticionBD;
 import com.iqtb.modelosAux.TxtArchivo;
 import com.iqtb.modelosAux.Peticion;
 import com.iqtb.modelosAux.Respuesta;
@@ -125,85 +126,50 @@ public class ArchivoTXT {
         logger.info("La lista nula, se retornarnulo");
         return null;
     }
-    
+
     public void procesarPeticion(Peticion peticion, String error, String NoEmisor, Integer idEmpresa) {
         List<TxtArchivo> listaFacturasArchivo = peticion.getListaTxtArchivo();
         List<TxtRespuesta> listaTxtRespuesta = new ArrayList<>();
-        if(idEmpresa != null){
+        if (idEmpresa != null) {
             if (listaFacturasArchivo != null) {
                 logger.info("La lista de facturas: " + listaFacturasArchivo.size());
-                int auxContador = 0;
                 logger.info("Se recibio la listaFactRespuesta de peticiones con tamanio: " + listaFacturasArchivo.size());
-                for (TxtArchivo facturaArchivoItem : listaFacturasArchivo) {
+                for(TxtArchivo facturaArchivoItem: listaFacturasArchivo){
                     try {
-                        auxContador++;  
                         //logger.info("El tamano de la lista para la peticion con id[" + auxContador + "] ");
                         String txtBase64 = facturaArchivoItem.getArchivoTxt();
                         logger.info("txt en base64: " + txtBase64);
                         byte[] txtBytes = LibBase64.decode(txtBase64);
-                        if(txtBytes != null ){
+                        if (txtBytes != null) {
                             String txt = new String(txtBytes, "UTF-8");
                             if (txt != null && !txt.isEmpty()) {
                                 txt = txt.trim();
                                 txtBytes = txt.getBytes("UTF-8");
                                 txt = new String(txtBytes, "UTF-8");
                             }
-                            //String clave = facturaArchivoItem.getClave();
-                            boolean isTxt = false;
-                            //Hay que validar que realmente sea un .txt 
-                            isTxt = true;
-                            //por desarrollar
-
-                            if (isTxt ) {
-                            //if (isTxt && clave!= null && clave.length()==50) {
-                                //logger.info("Se guardara archivo con Clave: "+clave);
-                                //Guardar Txt
-                                DocumentosRecibidos documentosRecibidoTemp = new DocumentosRecibidos();
-                                Sucursales sucursal = new SucursalesDAO().getByIdEmpresa(idEmpresa);
-                                documentosRecibidoTemp.setSucursales(sucursal);
-                                documentosRecibidoTemp.setFechaRecepcion(new Date());
-                                documentosRecibidoTemp.setArchivo(txt);
-                                documentosRecibidoTemp.setEstado("NUEVO");
-                                TiposCfd objTipoCfd = peticion.getUsuarioRecepcion().getTiposCfd();
-                                documentosRecibidoTemp.setTiposCfd(objTipoCfd);
-                                Integer idARCHIVO = new DocumentosRecibidosDAO().SaveOrUpdate(documentosRecibidoTemp);
-                                if (idARCHIVO != null) {
-                                    logger.info("DocumentoRecibido guardado con idARCHIVO: " + idARCHIVO);
-                                    Thread.sleep(6500);
-                                    DocumentosRecibidos archivoGenerado = new DocumentosRecibidosDAO().getByIdArchivo(idARCHIVO);
-                                    if(archivoGenerado != null){
-                                        logger.info("Se encontro documento recibido con estado diferente de NUEVO");
-                                        if(archivoGenerado.getEstado().equals("GENERADO")){
-                                            Xmls objXml = new XmlsDAO().getByIdArchivo(idARCHIVO);
-                                            String xmlTimbrado = "";
-                                            if(objXml != null){
-                                                logger.info("Se encontro objXml se agrega xmlsf");
-                                                if(objXml.getXmlSf() != null){
-                                                    xmlTimbrado = objXml.getXmlSf();
-                                                }
-                                            } 
-                                            TxtRespuesta txtResp = new TxtRespuesta("GENERADO", xmlTimbrado);
-                                            listaTxtRespuesta.add(txtResp);
-                                        }
-                                        
-                                        if(archivoGenerado.getEstado().equals("ERROR")){
-                                            TxtRespuesta txtResp = new TxtRespuesta("ERROR",archivoGenerado.getError());
-                                            listaTxtRespuesta.add(txtResp);
-                                        }
-                                    } else {
-                                        logger.info("No se ha procesado o esta siendo procesado el nuevo documento recibido");
-                                        TxtRespuesta txtResp = new TxtRespuesta("Guardado", "El documento sera procesado o esta siendo procesado");
+                            facturaArchivoItem.setArchivoTxt(txt);
+                            ProcesarPeticionBD objProcesarPeticionBD = new ProcesarPeticionBD();
+                            Integer tiempoEspera = 6500;
+                            String[] procesarPeticion = objProcesarPeticionBD.procesarPeticion(peticion, tiempoEspera);
+                            if (procesarPeticion != null) {
+                                if (procesarPeticion[0].equals("GENERADO")) {
+                                    TxtRespuesta txtResp = new TxtRespuesta("GENERADO", procesarPeticion[1]);
                                         listaTxtRespuesta.add(txtResp);
-                                    }
-                                } else {
-                                    logger.info("El DocumentoRecibido no pudo ser guardado correcamente");
-                                    TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El DocumentoRecibido no pudo ser guardado correctamente, intente mas tarde");
+                                }
+                                
+                                if (procesarPeticion[0].equals("ERROR")) {
+                                    TxtRespuesta txtResp = new TxtRespuesta("ERROR", procesarPeticion[1]);
                                     listaTxtRespuesta.add(txtResp);
                                 }
+                                
+                                if (procesarPeticion[0].equals("GUARDADO")) {
+                                    TxtRespuesta txtResp = new TxtRespuesta("GUARDADO", procesarPeticion[1]);
+                                    listaTxtRespuesta.add(txtResp);
+                                }
+
                             } else {
-                                logger.info("El contenido erroneo del txt es: " + txt);
-                                logger.info("Armando Respuesta erronea de contenido TXT");
-                                TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El txt No es base 64 o la clave es erronea");
+                                logger.info("El DocumentoRecibido no pudo ser guardado correcamente");
+                                TxtRespuesta txtResp = new TxtRespuesta("No guardado", "El DocumentoRecibido no pudo ser guardado correctamente, intente mas tarde");
                                 listaTxtRespuesta.add(txtResp);
                             }
                         } else {
@@ -214,9 +180,7 @@ public class ArchivoTXT {
                         }
                     } catch (UnsupportedEncodingException ex) {
                         logger.error("Error de codificacion: " + ex.getMessage());
-                    } catch (InterruptedException ex) {
-                        logger.error("InterruptedException: " + ex);
-                    }
+                    } 
                 }
             } else {
                 logger.info("La lista de Txt es nula");

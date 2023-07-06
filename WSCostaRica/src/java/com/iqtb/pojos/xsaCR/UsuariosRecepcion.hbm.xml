@@ -24,10 +24,10 @@
             <column name="PASSWD" length="45" not-null="true" />
         </property>
         <property name="homeftp" type="string">
-            <column name="HOMEFTP" length="45" />
+            <column name="HOMEFTP" length="255" />
         </property>
         <property name="homesftp" type="string">
-            <column name="HOMESFTP" length="45" />
+            <column name="HOMESFTP" length="255" />
         </property>
     </class>
 </hibernate-mapping>

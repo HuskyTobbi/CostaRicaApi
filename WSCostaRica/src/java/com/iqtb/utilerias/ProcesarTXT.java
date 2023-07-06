@@ -143,11 +143,6 @@ public class ProcesarTXT {
         logger.info("No existen hijos para este nodo Validar");
         return null;
     }
-
-    
-
-    
-    
     
     private UsuariosRecepcion verificarUsuarioBd(String usuario, String passVerificar) throws ErrorAutenticacion {
         UsuariosRecepcionDAO oUsuariosRecepcionDAO = new UsuariosRecepcionDAO();
@@ -162,7 +157,7 @@ public class ProcesarTXT {
             usuarioBd = oUsuariosRecepcion.getUsuario();
             //passBd = oUsuariosRecepcion.getPasswd();
             passBd = oUsuariosRecepcion.getPasswd();
-            logger.info("El usuario[" + usuarioBd + "<-> " + passBd + "] se encuentra en Bd.");
+//            logger.info("El usuario[" + usuarioBd + "<-> " + passBd + "] se encuentra en Bd.");
             if (usuario.equals(usuarioBd)) {
                 logger.info("El usuario[" + usuario + "] se encuentra en Bd.");
                 String pass_Des = desencryPwd(passBd);
